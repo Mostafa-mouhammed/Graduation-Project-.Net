@@ -5,18 +5,18 @@ using Project.BL.Dtos.ProductImages;
 using Project.DAL.Models;
 namespace Project.BL.Dtos.Product;
 public record ProductOneDTO(
-    int Id,
-    string Name,
+    int id,
+    string name,
     string desctiption,
-    string Image,
-    int Discount,
+    string image,
+    int discount,
     double rate,
-    int Quantity,
+    int quantity,
     double Price,
     ProductType productType,
     int? variantGroupId,
     BrandReadDTO brand,
-    CategoryReadDTO Category,
-    IEnumerable<ProductImagesReadDTO> ImagesReadDTOs,
+    CategoryReadDTO category,
+    IEnumerable<ProductImagesReadDTO> productImages,
     IEnumerable<AttributeWithValuesReadDTO>? versions
     );

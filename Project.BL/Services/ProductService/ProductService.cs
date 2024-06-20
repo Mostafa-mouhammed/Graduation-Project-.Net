@@ -1,12 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Project.BL.Dtos.Attribute;
-using Project.BL.Dtos.EAVProducts;
 using Project.BL.Dtos.Product;
 using Project.BL.Dtos.Statuscode;
 using Project.BL.Mappers.Mapper;
+using Project.DAL.DTOs.Products;
 using Project.DAL.Models;
 using Project.DAL.UnitOfWork;
-using System.Linq;
 
 namespace Project.BL.Services.ProductService;
 public class ProductService : IProductService
@@ -186,35 +184,32 @@ public class ProductService : IProductService
         return new StatuscodeDTO(Statuscode.NoContent);
     }
 
-    public async Task<StatuscodeDTO> GetGeneralProductsPagination
-        (int page = 1, int limit = 20, string sort = "Default", int categoryId = 0, int brandId = 0)
+    public async Task<StatuscodeDTO> GetGeneralProductsPagination(ProductQueryDTO query)
     {
-        IEnumerable<Product>? productModelList = await _unit.product
-            .GetProductsGeneralPagination(page, limit, sort, categoryId, brandId);
+        if (query.limit > 60) query.limit = 60;
+        IEnumerable<Product>? productModelList = await _unit.product.GetProductsGeneralPagination(query);
         CalculateAvgRating(productModelList!);
 
         IEnumerable<ProductReadDTO>? productReadDTOs = _mapper.product.listModelToReadDTO(productModelList!);
 
-        int countItems = await _unit.product.GetTotalGeneralPagination(categoryId, brandId);
-        int totalPages = getTotalPages(countItems, limit);
+        int countItems = await _unit.product.GetTotalGeneralPagination(query);
+        int totalPages = getTotalPages(countItems, query.limit);
 
         ProductGeneralPaginationDTO productByPagination = _mapper.product.toGeneralPagination(productReadDTOs, totalPages);
 
         return new StatuscodeDTO(Statuscode.Ok, null, productByPagination);
     }
 
-    public async Task<StatuscodeDTO> GetAdminProductsPagination
-        (int page = 1, int limit = 20, string sort = "Default", int categoryId = 0, int brandId = 0)
+    public async Task<StatuscodeDTO> GetAdminProductsPagination(ProductQueryDTO query)
     {
-        IEnumerable<Product>? productsModelList = await _unit.product
-            .GetProductsAdminPagination(page, limit, sort, categoryId, brandId);
+        IEnumerable<Product>? productsModelList = await _unit.product.GetProductsAdminPagination(query);
 
         CalculateAvgRating(productsModelList!);
 
         IEnumerable<ProductAdminReadDTO> productAdminReadDTOs = _mapper.product.listModelToAdminDTO(productsModelList!);
 
-        int countItems = await _unit.product.GetTotalAdminPagination(categoryId, brandId);
-        int totalPages = getTotalPages(countItems, limit);
+        int countItems = await _unit.product.GetTotalAdminPagination(query.subCategoryId, query.brandId);
+        int totalPages = getTotalPages(countItems, query.limit);
         ProductAdminPaginationDTO productByPagination = _mapper.product.toAdminPagination(productAdminReadDTOs, totalPages);
 
         return new StatuscodeDTO(Statuscode.Ok, null, productByPagination);
@@ -222,6 +217,7 @@ public class ProductService : IProductService
 
     int getTotalPages(int count, int limit)
     {
+        if (count <= 0) return 0;
         return (int)Math.Ceiling(((double)count / limit));
     }
     private void CalculateAvgRating(IEnumerable<Product> products)

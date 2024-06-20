@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Project.DAL.Data;
+using Project.DAL.DTOs.Products;
 using Project.DAL.Models;
 using Project.DAL.Repositories.Generic;
 
@@ -25,37 +26,39 @@ public class ProductRepository : GenericRepository<Product>, IProductRepository
 
 
 
-public async Task<IEnumerable<Product>>? GetProductsAdminPagination(int page, int limit, string sort, int subCategoryId, int brandId)
+public async Task<IEnumerable<Product>>? GetProductsAdminPagination(ProductQueryDTO q)
 {
      IQueryable<Product> query = _context.Set<Product>()
     .AsNoTracking()
-    .Where(p => (subCategoryId > 0) ? p.subCategoryId == subCategoryId : p.subCategoryId != 0)
-    .Where(p => (brandId > 0) ? p.brandId == brandId : p.brandId != 0)
+    .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
+    .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
     .DistinctBy(p => p.variantGroupId)
     .Include(p => p.Ratings)
-    .OrderByDescending(p => sort == "Low" ? -p.Price : sort == "High" ? p.Price : sort == "New" ? p.Id : sort == "Discount" ? p.Discount : p.Ratings.Average(r => r.rate))
-    .Skip((page - 1) * limit)
-    .Take(limit)
+    .OrderByDescending(p => q.sort == "Low" ? -p.Price : q.sort == "High" ? p.Price : q.sort == "New" ? p.Id : q.sort == "Discount" ? p.Discount : p.Ratings.Average(r => r.rate))
+    .Skip((q.page - 1) * q.limit)
+    .Take(q.limit)
     .AsQueryable();
 
     return await query.ToListAsync();
     }
 
-    public async Task<IEnumerable<Product>?> GetProductsGeneralPagination(int page, int limit, string sort, int categoryId, int brandId)
+    public async Task<IEnumerable<Product>?> GetProductsGeneralPagination(ProductQueryDTO q)
 {
-        IQueryable<Product> query =  _context.Set<Product>()
+        IQueryable<Product> query = _context
+         .Set<Product>()
          .AsNoTracking()
-         .Where(p => (categoryId > 0) ? p.subCategoryId == categoryId : p.subCategoryId != 0)
-         .Where(p => (brandId > 0) ? p.brandId == brandId : p.brandId != 0)
+         .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
+         .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
+         .Where(p => p.Name.Contains(q.keyword))
          .Include(p => p.Ratings)
          .OrderByDescending(p => 
-           sort == "Low" ? -p.Price
-         : sort == "High" ? p.Price
-         : sort == "New" ? p.Id
-         : sort == "Discount" ? p.Discount
+           q.sort == "Low" ? -p.Price
+         : q.sort == "High" ? p.Price
+         : q.sort == "New" ? p.Id
+         : q.sort == "Discount" ? p.Discount
          : p.Ratings.Average(r => r.rate))
-         .Skip((page - 1) * limit)
-         .Take(limit)
+         .Skip((q.page - 1) * q.limit)
+         .Take(q.limit)
          .AsQueryable();
 
         return await query.ToListAsync();
@@ -83,29 +86,16 @@ public async Task<int> GetTotalAdminPagination(int categoryId, int brandId)
       .CountAsync();
 }
 
-public async Task<int> GetTotalGeneralPagination(int categoryId, int brandId)
+public async Task<int> GetTotalGeneralPagination(ProductQueryDTO q)
 {
-    return await _context.Set<Product>()
-   .AsNoTracking()
-   .Where(p => p.isDeleted == false)
-   //.DistinctBy(p => p.variantGroupId)
-   .Where(p => (categoryId > 0) ? p.subCategoryId == categoryId : p.subCategoryId != 0)
-   .Where(p => (brandId > 0) ? p.brandId == brandId : p.brandId != 0)
-   .CountAsync();
-}
-
-public void retriveDeletedByBrand(int id)
-{
-    _context.Set<Product>()
-         .Where(p => p.brandId == id)
-         .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, false));
-}
-
-public void retriveDeletedByCategory(int id)
-{
-    _context.Set<Product>()
-         .Where(p => p.subCategoryId == id)
-         .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, false));
+    return await _context
+      .Set<Product>()
+      .AsNoTracking()
+      .Where(p => p.isDeleted == false)
+      .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
+      .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
+      .Where(p => p.Name.Contains(q.keyword))
+      .CountAsync();
 }
 
 public void softDeleteByBrand(int id)
@@ -115,11 +105,42 @@ public void softDeleteByBrand(int id)
          .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, true));
 }
 
+public void retriveDeletedByBrand(int id)
+{
+    _context.Set<Product>()
+         .Where(p => p.brandId == id)
+         .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, false));
+}
+
 public void softDeleteByCategory(int id)
 {
     _context.Set<Product>()
-         .Where(p => p.subCategoryId == id)
+         .Include(p => p.subCategory)
+         .Where(p => p.subCategory.categoryId == id)
          .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, true));
 }
+
+public void retriveDeletedByCategory(int id)
+{
+    _context.Set<Product>()
+         .Include(p => p.subCategory)
+         .Where(p => p.subCategory.categoryId == id)
+         .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, false));
+}
+
+    public void softDeleteBySubCategory(int id)
+    {
+        _context.Set<Product>()
+             .Where(p => p.subCategoryId == id)
+             .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, true));
+    }
+
+    public void retriveDeletedBySubCategory(int id)
+    {
+        _context.Set<Product>()
+             .Where(p => p.subCategoryId == id)
+             .ExecuteUpdate(p => p.SetProperty(p => p.isDeleted, false));
+    }
+
 
 }

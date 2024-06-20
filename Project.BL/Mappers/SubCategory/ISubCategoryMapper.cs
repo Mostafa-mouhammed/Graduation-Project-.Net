@@ -6,8 +6,11 @@ namespace Project.BL.Mappers.SubCategoryMapper;
 public interface ISubCategoryMapper
 {
     Task<SubCategory> insertToModel(SubCategoryInsertDTO insert);
-    SubCategoryReadDO modelToRead(SubCategory model);
-    IEnumerable<SubCategoryReadDO> modelToReadList(IEnumerable<SubCategory> model);
+    SubCategoryReadDTO modelToRead(SubCategory model);
+    IEnumerable<SubCategoryAdminReadDTO> modelToAdminReadList(IEnumerable<SubCategory> model);
+    SubCategoryAdminReadDTO modelToAdminRead(SubCategory model);
+    IEnumerable<SubCategoryReadDTO> modelToReadList(IEnumerable<SubCategory> model);
     SubCategoryDetailsDTO modelToDetails(SubCategory subcategory,IEnumerable<SubCategoryImageReadDTO> images);
     IEnumerable<SubCategoryWithProductDTO> modelToWithProductsList(IEnumerable<SubCategory> subCategories);
+
 }

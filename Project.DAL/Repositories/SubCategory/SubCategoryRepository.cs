@@ -39,7 +39,7 @@ public class SubCategoryRepository : GenericRepository<SubCategory>, ISubCategor
         IQueryable<SubCategory> query = _context
             .Set<SubCategory>()
             .AsNoTracking()
-            .Where(sc => sc.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+            .Where(sc => sc.Name.Equals(name))
             .AsQueryable();
 
         return await query.FirstOrDefaultAsync();

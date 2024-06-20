@@ -3,6 +3,6 @@
 namespace Project.BL.Dtos.Attribute;
 public record AttributeWithValuesReadDTO(
         int ProductId,
-        IEnumerable<AttributesReadDTO> attributesReadDTO,
+        IEnumerable<AttributesReadDTO> attributes,
         IEnumerable<ValuesReadDTO> values
     );

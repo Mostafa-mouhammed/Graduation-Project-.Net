@@ -13,4 +13,6 @@ public interface ISubCategoryService
     Task<StatuscodeDTO> AddSubCategorybanner(SubCategoryImageInsertDTO insert);
     Task<StatuscodeDTO> update(int Id, SubCategoryUpdateDTO update);
     Task<StatuscodeDTO> delete(int Id);
+    Task<StatuscodeDTO> SoftDelete(int Id);
+    Task<StatuscodeDTO> Retrieve(int Id);
 }

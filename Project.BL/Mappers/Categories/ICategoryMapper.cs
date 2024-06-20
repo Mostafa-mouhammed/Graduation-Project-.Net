@@ -12,4 +12,5 @@ public interface ICategoryMapper
     CategoryDetailsDTO modelToDetail(Category category, IEnumerable<CategoryImageReadDTO> banners);
     IEnumerable<CategoryReadDTO> listModelToReadDTO(IEnumerable<Category> category);
     IEnumerable<categoryAdminDTO> listModelToReadAdmin(IEnumerable<Category> category);
+    IEnumerable<CategoryWithSubs> modelToCategorySubsList(IEnumerable<Category> list);
 }

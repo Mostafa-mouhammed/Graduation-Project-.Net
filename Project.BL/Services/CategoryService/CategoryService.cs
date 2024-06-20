@@ -70,8 +70,7 @@ public class CategoryService : ICategoryService
         if (Category == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no category with this id");
 
-        //_unitRepository.category.Delete(Category);
-        Category.isDeleted = true;
+        _unitRepository.category.Delete(Category);
         await _unitRepository.SaveChanges();
         return new StatuscodeDTO(Statuscode.NoContent);
     }
@@ -82,8 +81,10 @@ public class CategoryService : ICategoryService
 
         if (Category == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no category with this id");
+
         Category.isDeleted = true;
         _unitRepository.product.softDeleteByCategory(id);
+
         await _unitRepository.SaveChanges();
         return new StatuscodeDTO(Statuscode.NoContent);
     }
@@ -91,8 +92,8 @@ public class CategoryService : ICategoryService
     public async Task<StatuscodeDTO> GetAllGeneralCategories()
     {
         IEnumerable<Category>? modelCategories = await _unitRepository.category.getCateoriesForGeneral();
-        IEnumerable<CategoryReadDTO> readCategories = _mapper.category.listModelToReadDTO(modelCategories);
-        return new StatuscodeDTO(Statuscode.Ok, null, readCategories);
+        IEnumerable<CategoryWithSubs> categoryWithSubs = _mapper.category.modelToCategorySubsList(modelCategories);
+        return new StatuscodeDTO(Statuscode.Ok, null, categoryWithSubs);
     }
 
     public async Task<StatuscodeDTO> RetreiveDeletedCategory(int id)
@@ -101,8 +102,10 @@ public class CategoryService : ICategoryService
 
         if (Category == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no category with this id");
+
         Category.isDeleted = false;
         _unitRepository.product.retriveDeletedByCategory(id);
+
         await _unitRepository.SaveChanges();
         return new StatuscodeDTO(Statuscode.NoContent);
     }

@@ -1,14 +1,22 @@
 ﻿using Project.BL.Dtos.Category;
 using Project.BL.Dtos.CategoryImageDtos;
 using Project.BL.Dtos.Product;
+using Project.BL.Dtos.SubCategory;
 using Project.BL.Mappers.Images;
 using Project.BL.Mappers.Products;
+using Project.BL.Mappers.SubCategoryMapper;
 using Project.DAL.Models;
 
 namespace Project.BL.Mappers.Categories;
 
 public class CategoryMapper : ICategoryMapper
 {
+    private readonly ISubCategoryMapper _subCategoryMapper;
+
+    public CategoryMapper(ISubCategoryMapper subCategoryMapper)
+    {
+        _subCategoryMapper = subCategoryMapper;
+    }
 
     public CategoryDetailsDTO modelToDetail(Category category,IEnumerable<CategoryImageReadDTO> banners)
     {
@@ -44,5 +52,18 @@ public class CategoryMapper : ICategoryMapper
     public categoryAdminDTO modelToReadAdmin(Category model)
     {
         return new categoryAdminDTO(model.Id,model.Name,model.Description,model.isDeleted,model.image);
+    }
+
+    public IEnumerable<CategoryWithSubs> modelToCategorySubsList(IEnumerable<Category> list)
+    {
+       return list.Select(c => modelToCategorySubs(c));
+    }
+
+    private CategoryWithSubs modelToCategorySubs(Category category)
+    {
+        CategoryReadDTO categoryRead = modelToRead(category);
+        IEnumerable<SubCategoryReadDTO> subCategoryReads = _subCategoryMapper.modelToReadList(category.subCategories);
+
+        return new CategoryWithSubs(categoryRead, subCategoryReads);
     }
 }

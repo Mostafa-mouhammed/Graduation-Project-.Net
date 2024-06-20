@@ -29,16 +29,16 @@ public class SubCategoryMapper : ISubCategoryMapper
 
     public SubCategoryDetailsDTO modelToDetails(SubCategory subcategory, IEnumerable<SubCategoryImageReadDTO> images)
     {
-        SubCategoryReadDO subcategoryDto = modelToRead(subcategory);
+        SubCategoryReadDTO subcategoryDto = modelToRead(subcategory);
         return new SubCategoryDetailsDTO(subcategoryDto,images);
     }
 
-    public SubCategoryReadDO modelToRead(SubCategory model)
+    public SubCategoryReadDTO modelToRead(SubCategory model)
     {
-        return new SubCategoryReadDO(model.Id,model.Name,model.Description,model.image,model.categoryId);
+        return new SubCategoryReadDTO(model.Id,model.Name,model.Description,model.image,model.categoryId);
     }
 
-    public IEnumerable<SubCategoryReadDO> modelToReadList(IEnumerable<SubCategory> model)
+    public IEnumerable<SubCategoryReadDTO> modelToReadList(IEnumerable<SubCategory> model)
     {
         return model.Select(m => modelToRead(m));
     }
@@ -52,5 +52,15 @@ public class SubCategoryMapper : ISubCategoryMapper
     public IEnumerable<SubCategoryWithProductDTO> modelToWithProductsList(IEnumerable<SubCategory> subCategories)
     {
         return subCategories.Select(sc => modelToOneWithProduct(sc));
+    }
+
+    public IEnumerable<SubCategoryAdminReadDTO> modelToAdminReadList(IEnumerable<SubCategory> model)
+    {
+        return model.Select(m => modelToAdminRead(m));
+    }
+
+    public SubCategoryAdminReadDTO modelToAdminRead(SubCategory model)
+    {
+        return new SubCategoryAdminReadDTO(model.Id, model.Name,model.isDeleted, model.Description, model.image, model.categoryId);
     }
 }

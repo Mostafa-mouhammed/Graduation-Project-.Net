@@ -79,11 +79,19 @@ public class SubCategoryController : ControllerBase
 
     [HttpDelete]
     //[Authorize("Admin")]
-    [Route("Delete")]
-    public async Task<IActionResult> Delete(int Id)
+    [Route("SoftDelete")]
+    public async Task<IActionResult> SoftDelete(int Id)
     {
-        StatuscodeDTO result = await _unit.subCategory.delete(Id);
+        StatuscodeDTO result = await _unit.subCategory.SoftDelete(Id);
         return StatusCode((int)result.Statuscode, result.data ?? result.message);
     }
 
+    [HttpPut]
+    //[Authorize("Admin")]
+    [Route("Retrive")]
+    public async Task<IActionResult> Retrive(int Id)
+    {
+        StatuscodeDTO result = await _unit.subCategory.Retrieve(Id);
+        return StatusCode((int)result.Statuscode, result.data ?? result.message);
+    }
 }

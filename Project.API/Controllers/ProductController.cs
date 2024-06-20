@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.BL.Dtos.Product;
 using Project.BL.Dtos.Statuscode;
 using Project.BL.Services.UnitService;
+using Project.DAL.DTOs.Products;
 
 namespace Project.API.Controllers;
 
@@ -18,19 +19,19 @@ public class ProductController : ControllerBase
         _unit = unit;
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("GetGeneralPagination")]
-    public async Task<IActionResult> GetGeneralPagination(int page , int limit , string sort,int categoryId,int brandId)
+    public async Task<IActionResult> GetGeneralPagination(ProductQueryDTO query)
     {
-        StatuscodeDTO result = await _unit.product.GetGeneralProductsPagination(page,limit,sort,categoryId,brandId);
+        StatuscodeDTO result = await _unit.product.GetGeneralProductsPagination(query);
         return StatusCode((int)result.Statuscode, result.data ?? result.message);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("GetAdminPagination")]
-    public async Task<IActionResult> GetAdminPagination(int page , int limit , string sort, int categoryId, int brandId)
+    public async Task<IActionResult> GetAdminPagination(ProductQueryDTO query)
     {
-        StatuscodeDTO result = await _unit.product.GetAdminProductsPagination(page,limit,sort, categoryId, brandId);
+        StatuscodeDTO result = await _unit.product.GetAdminProductsPagination(query);
         return StatusCode((int)result.Statuscode, result.data ?? result.message);
     }
 

@@ -42,6 +42,7 @@ public class CategoryRepository:GenericRepository<Category>, ICategoryRepository
            .Set<Category>()
            .AsNoTracking()
            .Where(c => c.isDeleted == false)
+           .Include(c => c.subCategories)
            .AsQueryable();
 
             return await query.ToListAsync();

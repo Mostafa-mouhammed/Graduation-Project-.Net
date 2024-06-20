@@ -70,7 +70,7 @@ public class SubCategoryService : ISubCategoryService
     public async Task<StatuscodeDTO> getAll()
     {
         IEnumerable<SubCategory> subCategoriesModels = await _unit.subCategory.GetAll();
-        IEnumerable<SubCategoryReadDO> subCategoriesRead = _mapper.subCategory.modelToReadList(subCategoriesModels);
+        IEnumerable<SubCategoryAdminReadDTO> subCategoriesRead = _mapper.subCategory.modelToAdminReadList(subCategoriesModels);
         return new StatuscodeDTO(Statuscode.Ok,null, subCategoriesRead);
     }
 
@@ -81,7 +81,7 @@ public class SubCategoryService : ISubCategoryService
             return new StatuscodeDTO(Statuscode.NotFound, "There is no category with this id");
 
         IEnumerable<SubCategory> subCategories = await _unit.subCategory.getSubcategoriesbyCategory(Id);
-        IEnumerable<SubCategoryReadDO> subCategoriesDTO = _mapper.subCategory.modelToReadList(subCategories);
+        IEnumerable<SubCategoryReadDTO> subCategoriesDTO = _mapper.subCategory.modelToReadList(subCategories);
 
         return new StatuscodeDTO(Statuscode.Ok, null,subCategoriesDTO);
     }
@@ -103,6 +103,34 @@ public class SubCategoryService : ISubCategoryService
         IEnumerable<SubCategoryWithProductDTO> subcategoireswithproducts = _mapper.subCategory.modelToWithProductsList(subCategories);
 
         return new StatuscodeDTO(Statuscode.Ok,null, subcategoireswithproducts);
+    }
+
+    public async Task<StatuscodeDTO> Retrieve(int Id)
+    {
+        SubCategory subCategory = await _unit.subCategory.Getone(Id);
+        if (subCategory == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "There is no sub category with this id");
+
+        subCategory.isDeleted = false;
+        _unit.product.retriveDeletedBySubCategory(Id);
+
+        await _unit.SaveChanges();
+
+        return new StatuscodeDTO(Statuscode.NoContent);
+    }
+
+    public async Task<StatuscodeDTO> SoftDelete(int Id)
+    {
+        SubCategory subCategory = await _unit.subCategory.Getone(Id);
+        if (subCategory == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "There is no sub category with this id");
+
+        subCategory.isDeleted = true;
+        _unit.product.softDeleteBySubCategory(Id);
+
+        await _unit.SaveChanges();
+
+        return new StatuscodeDTO(Statuscode.NoContent);
     }
 
     public async Task<StatuscodeDTO> update(int Id,SubCategoryUpdateDTO update)

@@ -35,7 +35,7 @@ public class EAVController : ControllerBase
     [HttpPost]
     //[Authorize("Admin")]
     [Route("GetProductIdbyValues")]
-    public async Task<IActionResult> GetProductIdbyValues([FromForm] int groupId, [FromForm] IEnumerable<int> values)
+    public async Task<IActionResult> GetProductIdbyValues(int groupId,IEnumerable<int> values)
     {
         StatuscodeDTO result = await _unit.EAV.getProductIdbyValues(groupId, values);
         return StatusCode((int)result.Statuscode, result.data ?? result.message);
