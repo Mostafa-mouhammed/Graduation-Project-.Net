@@ -98,7 +98,7 @@ public class BrandService : IBrandService
             return new StatuscodeDTO(Statuscode.NotFound, "There is no brand with this id");
 
         brand.Name = insert.Name;
-        brand.image = insert.image;
+        if(insert.image != null) brand.image = insert.image;
         _unit.brand.Update(brand);
         await _unit.SaveChanges();
 

@@ -25,21 +25,26 @@ public class ProductRepository : GenericRepository<Product>, IProductRepository
     }
 
 
-
 public async Task<IEnumerable<Product>>? GetProductsAdminPagination(ProductQueryDTO q)
 {
-     IQueryable<Product> query = _context.Set<Product>()
-    .AsNoTracking()
-    .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
-    .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
-    .DistinctBy(p => p.variantGroupId)
-    .Include(p => p.Ratings)
-    .OrderByDescending(p => q.sort == "Low" ? -p.Price : q.sort == "High" ? p.Price : q.sort == "New" ? p.Id : q.sort == "Discount" ? p.Discount : p.Ratings.Average(r => r.rate))
-    .Skip((q.page - 1) * q.limit)
-    .Take(q.limit)
-    .AsQueryable();
+        IQueryable<Product> query = _context
+         .Set<Product>()
+         .AsNoTracking()
+         .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
+         .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
+         .Where(p => p.Name.Contains(q.keyword))
+         .Include(p => p.Ratings)
+         .OrderByDescending(p =>
+           q.sort == "Low" ? -p.Price
+         : q.sort == "High" ? p.Price
+         : q.sort == "New" ? p.Id
+         : q.sort == "Discount" ? p.Discount
+         : p.Ratings.Average(r => r.rate))
+         .Skip((q.page - 1) * q.limit)
+         .Take(q.limit)
+         .AsQueryable();
 
-    return await query.ToListAsync();
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Product>?> GetProductsGeneralPagination(ProductQueryDTO q)
@@ -47,6 +52,7 @@ public async Task<IEnumerable<Product>>? GetProductsAdminPagination(ProductQuery
         IQueryable<Product> query = _context
          .Set<Product>()
          .AsNoTracking()
+         .Where(p => p.isDeleted == false)
          .Where(p => (q.subCategoryId > 0) ? p.subCategoryId == q.subCategoryId : p.subCategoryId != 0)
          .Where(p => (q.brandId > 0) ? p.brandId == q.brandId : p.brandId != 0)
          .Where(p => p.Name.Contains(q.keyword))

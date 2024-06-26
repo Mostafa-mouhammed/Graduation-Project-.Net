@@ -150,21 +150,21 @@ public class OrderService : IOrderService
         foreach (var item in cart.cartProducts)
         {
             // Create a SessionLineItemOptions object for the current product
-            var lineItem = new SessionLineItemOptions
-            {
-                PriceData = new SessionLineItemPriceDataOptions
+                var lineItem = new SessionLineItemOptions
                 {
-                    Currency = "USD",
-                    UnitAmount = (int)item.Product.Price * 100, // Convert unit price to cents
-                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    PriceData = new SessionLineItemPriceDataOptions
                     {
-                        Name = item.Product.Name,
-                        Images = new List<string> { item.Product.Image }
-                    }
-                },
-                Quantity = item.CartProductQuantity,
+                        Currency = "USD",
+                        UnitAmount = (int)item.Product.Price * 100, // Convert unit price to cents
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Name,
+                            Images = new List<string> { item.Product.Image }
+                        }
+                    },
+                    Quantity = item.CartProductQuantity,
 
-            };
+                };
 
             // Add the SessionLineItemOptions to the lineItems list
             lineItems.Add(lineItem);
@@ -177,7 +177,7 @@ public class OrderService : IOrderService
             LineItems = lineItems,
             SuccessUrl = $"https://localhost:7173/api/Order/PaymentSucsses?userId={userId}&orderId={orderId}",
             CancelUrl = $"https://localhost:7173/api/Order/PaymentFailed?userId={userId}&orderId={orderId}",
-            ExpiresAt = DateTime.UtcNow.AddMinutes(30),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(35),
         };
 
         var service = new SessionService();

@@ -151,8 +151,8 @@ public class ProductService : IProductService
         if (product == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no product with this id");
 
-        Category? category = await _unit.category.Getone(insert.subCategoryId)!;
-        if (category == null)
+        SubCategory? subcategory = await _unit.subCategory.Getone(insert.subCategoryId)!;
+        if (subcategory == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no category with this id");
 
         Brand? brand = await _unit.brand.Getone(insert.brandId)!;
@@ -166,6 +166,7 @@ public class ProductService : IProductService
         if (insert.Image != null) product.Image = insert.Image;
         product.Quantity = insert.Quantity;
         product.brandId = insert.brandId;
+        product.Discount = insert.Discount;
 
         _unit.product.Update(product);
         await _unit.SaveChanges();
