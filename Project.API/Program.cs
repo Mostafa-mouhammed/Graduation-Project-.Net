@@ -36,7 +36,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 
 builder.Services.AddDbContext<APIContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DBSecretConnection")));
+    options.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_aaa5a0_itigalaxywebapp;User Id=db_aaa5a0_itigalaxywebapp_admin;Password=A123456a"
+));
 
 builder.Services.AddAuthentication(options =>
 {
