@@ -6,6 +6,7 @@ using Project.DAL.UnitOfWork;
 using Stripe.Checkout;
 using Stripe;
 using System.Security.Claims;
+using Project.BL.Dtos.Brand;
 
 namespace Project.BL.Services.OrderService;
 public class OrderService : IOrderService
@@ -199,6 +200,24 @@ public class OrderService : IOrderService
         {
             cartproduct.CartProductQuantity = cartproduct.Product.Quantity;
         }
+    }
+    public async Task<IEnumerable<OrderReadDTO>> GetAllOrders()
+    {
+        IEnumerable<Order> orders = await _unitRepository.order.GetAll();
+        IEnumerable<OrderReadDTO> ordersDTO = _mapper.order.listModelToRead(orders);
+        return ordersDTO;
+    }
+
+    public async Task<StatuscodeDTO> UpdateOrderStatus(int orderId, OrderStatus newStatus)
+    {
+        Order? order = await _unitRepository.order.Getone(orderId);
+        if (order == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "Order not found.");
+
+        order.status = newStatus;
+        await _unitRepository.SaveChanges();
+
+        return new StatuscodeDTO(Statuscode.Ok);
     }
 
     public async Task returnQtyStockBackAfterCancellation(int orderId)

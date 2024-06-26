@@ -42,7 +42,7 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
             .Where(o => 
              sort.Equals("cancelled") ? o.status.Equals(OrderStatus.Cancelled)
             :sort.Equals("pending") ? o.status.Equals(OrderStatus.Pending)
-            :sort.Equals("deliverd") ? o.status.Equals(OrderStatus.Deliverd)
+            :sort.Equals("delivered") ? o.status.Equals(OrderStatus.Delivered)
             :!o.status.Equals(OrderStatus.PendingPayment)
             )
             .Skip((page - 1) * 5)

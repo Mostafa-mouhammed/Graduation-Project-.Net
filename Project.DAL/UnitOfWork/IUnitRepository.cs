@@ -16,6 +16,7 @@ using Project.DAL.Repositories.ProductTypesRepository;
 using Project.DAL.Repositories.Ratingrepo;
 using Project.DAL.Repositories.SubCategoryImagesRepostiory;
 using Project.DAL.Repositories.SubCategoryRepository;
+using Project.DAL.Repositories.User;
 using Project.DAL.Repositories.ValuesRepository;
 using Project.DAL.Repositories.VaraityGroupRepository;
 using Project.DAL.Repositories.VariantGroupAttributeRepository;
@@ -45,6 +46,8 @@ public interface IUnitRepository
     public IBrandRepository brand { get; }
     public IWishListRepository wishlist { get; }
     public IRatingRepository rating { get; }
+    public IUserRepository userReposit { get; }
+
     public UserManager<User> user { get; }
     Task SaveChanges();
 }

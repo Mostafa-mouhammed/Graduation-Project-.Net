@@ -73,4 +73,20 @@ public class UserService : IUserService
 
         return new StatuscodeDTO(Statuscode.NoContent);
     }
+    public async Task<StatuscodeDTO> GetAllUsers()
+    {
+        IEnumerable<User> allUsers = await _unit.userReposit.GetAll();
+        List<UserReadDTO> usersDto = allUsers.Select(u => _mapper.user.modelToRead(u)).ToList();
+        return new StatuscodeDTO(Statuscode.Ok, null, usersDto);
+    }
+
+    public async Task<StatuscodeDTO> GetUserById(string id)
+    {
+        User? user = await _unit.userReposit.GetUser(id);
+        if (user == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "User not found");
+
+        UserReadDTO userDto = _mapper.user.modelToRead(user);
+        return new StatuscodeDTO(Statuscode.Ok, null, userDto);
+    }
 }

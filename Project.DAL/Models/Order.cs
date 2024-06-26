@@ -28,5 +28,5 @@ public enum OrderStatus
     PendingPayment = 0,
     Cancelled = 1,
     Pending = 2,
-    Deliverd = 3
+    Delivered = 3
 }

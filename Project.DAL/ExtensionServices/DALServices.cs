@@ -16,6 +16,7 @@ using Project.DAL.Repositories.ProductTypesRepository;
 using Project.DAL.Repositories.Ratingrepo;
 using Project.DAL.Repositories.SubCategoryImagesRepostiory;
 using Project.DAL.Repositories.SubCategoryRepository;
+using Project.DAL.Repositories.User;
 using Project.DAL.Repositories.ValuesRepository;
 using Project.DAL.Repositories.VaraityGroupRepository;
 using Project.DAL.Repositories.VariantGroupAttributeRepository;
@@ -48,6 +49,7 @@ public static class DALServices
         services.AddScoped<IVaraityGroupRepository, VaraityGroupRepository>();
         services.AddScoped<IWishListRepository, WishListRepository>();
         services.AddScoped<IUnitRepository, UnitRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
     }
 }

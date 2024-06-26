@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Project.BL.Dtos.Orders;
 using Project.BL.Dtos.Statuscode;
 using Project.BL.Services.UnitService;
+using Project.DAL.Models;
 using Stripe;
 
 namespace Project.API.Controllers;
@@ -59,6 +61,23 @@ public class OrderController : ControllerBase
         {
             return StatusCode((int)result.Statuscode, result.data ?? result.message);
         }
+    }
+    //[Authorize]
+    [Route("GetAllOrders")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllOrders()
+    {
+        IEnumerable<OrderReadDTO> orders = await _unit.order.GetAllOrders();
+        return StatusCode((int)StatusCodes.Status200OK, orders);
+    }
+    //[Authorize]
+    //[Authorize(Roles = "Admin")] 
+    [HttpPut]
+    [Route("ChangeOrderStatus")]
+    public async Task<IActionResult> ChangeOrderStatus([FromQuery] int orderId, [FromQuery] OrderStatus newStatus)
+    {
+        StatuscodeDTO result = await _unit.order.UpdateOrderStatus(orderId, newStatus);
+        return StatusCode((int)result.Statuscode, result.data ?? result.message);
     }
 
     [Route("PaymentFailed")]
