@@ -13,6 +13,6 @@ public interface IUserService
     Task<StatuscodeDTO> updateProfileImage(ClaimsPrincipal user,IFormFile newphoto);
     Task<StatuscodeDTO> GetUserById(string id);
     Task<StatuscodeDTO> GetAllUsers();
-
+    Task<StatuscodeDTO> DeleteUser(string id);
 
 }

@@ -89,4 +89,15 @@ public class UserService : IUserService
         UserReadDTO userDto = _mapper.user.modelToRead(user);
         return new StatuscodeDTO(Statuscode.Ok, null, userDto);
     }
+
+    public async Task<StatuscodeDTO> DeleteUser(string id)
+    {
+        User? user = await _unit.userReposit.GetUser(id);
+        if (user == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "User not found");
+        await _unit.user.DeleteAsync(user);
+
+        return new StatuscodeDTO(Statuscode.NoContent);
+    }
+
 }
