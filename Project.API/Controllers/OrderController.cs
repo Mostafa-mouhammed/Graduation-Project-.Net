@@ -62,7 +62,7 @@ public class OrderController : ControllerBase
             return StatusCode((int)result.Statuscode, result.data ?? result.message);
         }
     }
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("GetAllOrders")]
     [HttpGet]
     public async Task<IActionResult> GetAllOrders()
@@ -70,8 +70,7 @@ public class OrderController : ControllerBase
         IEnumerable<OrderReadDTO> orders = await _unit.order.GetAllOrders();
         return StatusCode((int)StatusCodes.Status200OK, orders);
     }
-    //[Authorize]
-    //[Authorize(Roles = "Admin")] 
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     [Route("ChangeOrderStatus")]
     public async Task<IActionResult> ChangeOrderStatus([FromQuery] int orderId, [FromQuery] OrderStatus newStatus)

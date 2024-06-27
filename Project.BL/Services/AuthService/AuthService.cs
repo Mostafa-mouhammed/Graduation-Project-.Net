@@ -37,6 +37,12 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.Email,user.Email),
             new Claim(ClaimTypes.Name,user.fullName)
         };
+        var roles =  _userManger.GetRolesAsync(user).Result.SingleOrDefault();
+         if(roles != null)
+        {
+            userClaims.Add(new Claim(ClaimTypes.Role, roles));
+        }
+
         var key = _configuration.GetSection("jwtSecretKey").Value;
         var keyInBytes = Encoding.ASCII.GetBytes(key);
         var symitricKey = new SymmetricSecurityKey(keyInBytes);
@@ -45,6 +51,7 @@ public class AuthService : IAuthService
         var jwt = new JwtSecurityToken(
             claims: userClaims,
             expires: expireDate,
+            
             signingCredentials: signingCredentials);
         var Token = new JwtSecurityTokenHandler().WriteToken(jwt);
         return Token;
@@ -61,6 +68,7 @@ public class AuthService : IAuthService
             return new StatuscodeDTO(Statuscode.NotFound, "email or password is incorrect");
 
         string Token = generateToken(user);
+        var x = await _userManger.GetRolesAsync(user);   
         return new StatuscodeDTO(Statuscode.Ok, null, Token);
     }
 
@@ -72,6 +80,14 @@ public class AuthService : IAuthService
 
         User? newUser = _mapper.user.SignToUser(user);
         var result = await _userManger.CreateAsync(newUser, user.password);
+
+
+        var roleResult = await _userManger.AddToRoleAsync(newUser, "User");
+        if (!roleResult.Succeeded)
+            return new StatuscodeDTO(Statuscode.BadRequest, roleResult.Errors.ToString());
+
+
+
         string Token = generateToken(newUser);
 
         if (!result.Succeeded)  

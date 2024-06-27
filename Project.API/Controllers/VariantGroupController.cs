@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.BL.Dtos.Statuscode;
 using Project.BL.Dtos.VariantGroup;
@@ -50,6 +51,7 @@ public class VariantGroupController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     [Route("Update")]
     public async Task<IActionResult> Update(int Id, VariantGroupUpdate update)
     {
@@ -58,6 +60,7 @@ public class VariantGroupController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = "Admin")]
     [Route("Delete")]
     public async Task<IActionResult> Delete(int Id)
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.BL.Dtos.Statuscode;
 using Project.BL.Dtos.SubCategory;
@@ -51,7 +52,7 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddOne")]
     public async Task<IActionResult> AddOne(SubCategoryInsertDTO insert)
     {
@@ -60,7 +61,7 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddCategorybanner")]
     public async Task<IActionResult> AddCategorybanner(SubCategoryImageInsertDTO insert)
     {
@@ -69,7 +70,7 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("Update")]
     public async Task<IActionResult> Update(int Id, SubCategoryUpdateDTO update)
     {
@@ -78,7 +79,7 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("SoftDelete")]
     public async Task<IActionResult> SoftDelete(int Id)
     {
@@ -87,7 +88,7 @@ public class SubCategoryController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("Retrive")]
     public async Task<IActionResult> Retrive(int Id)
     {

@@ -28,6 +28,7 @@ public class ValuesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [Route("AddValue")]
     public async Task<IActionResult> AddValue(ValueInsertDTO insert)
     {
@@ -36,6 +37,7 @@ public class ValuesController : ControllerBase
     }
     
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     [Route("updateValues")]
     public async Task<IActionResult> updateValues(int valueId,ValueUpdateDTO updatedValue)
     {
@@ -44,6 +46,7 @@ public class ValuesController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = "Admin")]
     [Route("deleteValues")]
     public async Task<IActionResult> deleteValues(int valueId)
     {

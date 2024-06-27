@@ -18,7 +18,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("GetAllAdmin")]
     public async Task<IActionResult> GetAllAdmin()
     {
@@ -43,7 +43,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddBrand")]
     public async Task<IActionResult> AddBrand(BrandInsertDTO brand)
     {
@@ -52,7 +52,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("UpdateBrand")]
     public async Task<IActionResult> UpdateBrand(int id, BrandInsertDTO brand)
     {
@@ -61,7 +61,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("DeleteBrand")]
     public async Task<IActionResult> DeleteBrand(int id)
     {
@@ -71,7 +71,7 @@ public class BrandController : ControllerBase
 
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("SoftDeleteBrand")]
     public async Task<IActionResult> SoftDeleteBrand(int id)
     {
@@ -80,7 +80,7 @@ public class BrandController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")
+    [Authorize(Roles = "Admin")]
     [Route("RetrieveDeletedBrand")]
     public async Task<IActionResult> RetrieveDeletedBrand(int id)
     {

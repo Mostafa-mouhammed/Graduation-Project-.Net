@@ -71,6 +71,7 @@ namespace Project.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -87,6 +88,7 @@ namespace Project.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         [Route("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {

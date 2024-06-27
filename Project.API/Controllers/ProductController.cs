@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Project.BL.Dtos.Product;
@@ -44,7 +45,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddSimpleProduct")]
     public async Task<IActionResult> AddSimpleProduct(ProductSimpleInsertDTO insert)
     {
@@ -53,7 +54,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddVarProduct")]
     public async Task<IActionResult> AddVarProduct(ProductVarInsertDTO insert)
     {
@@ -62,7 +63,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("UpdateProduct")]
     public async Task<IActionResult> UpdateProduct(int id,ProductSimpleInsertDTO insert)
     {
@@ -71,7 +72,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("DeleteProduct")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
@@ -80,7 +81,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("RetreiveDeletedProduct")]
     public async Task<IActionResult> RetreiveDeletedProduct(int id)
     {

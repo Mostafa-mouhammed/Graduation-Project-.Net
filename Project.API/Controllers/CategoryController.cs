@@ -20,7 +20,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("GetAllAdmin")]
    public async Task<IActionResult> GetAllAdmin()
     {
@@ -46,7 +46,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("AddCategory")]
     public async Task<IActionResult> AddCategory(CategoryInsertDTO category)
     {
@@ -55,6 +55,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [Route("AddCategoryImages")]
     public async Task<IActionResult> AddCategoryImages(CategoryImageInsertDTO insert)
     {
@@ -63,7 +64,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("UpdateCategory")]
     public async Task<IActionResult> UpdateCategory(int id, CategoryInsertDTO category)
     {
@@ -72,7 +73,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("DeleteCategory")]
     public async Task<IActionResult> DeleteCategory(int id)
     {
@@ -81,7 +82,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("SoftDeleteCategory")]
     public async Task<IActionResult> SoftDeleteCategory(int id)
     {
@@ -90,7 +91,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
-    //[Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("RetrieveDeletedCategory")]
     public async Task<IActionResult> RetrieveDeletedCategory(int id)
     {
