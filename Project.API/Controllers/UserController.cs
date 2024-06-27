@@ -85,5 +85,13 @@ namespace Project.API.Controllers
             StatuscodeDTO result = await _unit.user.GetUserById(id);
             return StatusCode((int)result.Statuscode, result.data ?? result.message);
         }
+
+        [HttpDelete]
+        [Route("GetUserById/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            StatuscodeDTO result = await _unit.user.DeleteUser(id);
+            return StatusCode((int)result.Statuscode, result.data ?? result.message);
+        }
     }
 }
