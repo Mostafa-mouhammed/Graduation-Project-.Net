@@ -87,7 +87,7 @@ namespace Project.API.Controllers
         }
 
         [HttpDelete]
-        [Route("GetUserById/{id}")]
+        [Route("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             StatuscodeDTO result = await _unit.user.DeleteUser(id);
