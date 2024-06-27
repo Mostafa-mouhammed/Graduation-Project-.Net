@@ -16,7 +16,7 @@ public class User:IdentityUser
     public string fullName => $"{firstName} {lastName}";
     [MaxLength(400)]
     public string? address { get; set; } = string.Empty;
-    public string image { get; set; } = "https://localhost:7173/images/default-user.jpg";
+    public string image { get; set; } = "https://localhost:7173/images/default-user.png";
     public IEnumerable<Order> Orders { get; set; } = null!;
     public IEnumerable<Rating> rating { get; set; } = null!;
     public IEnumerable<WishList> wishList { get; set; } = null!;

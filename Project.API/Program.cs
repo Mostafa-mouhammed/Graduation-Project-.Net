@@ -32,7 +32,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddDbContext<APIContext>(options =>
-    options.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_aa9e4e_itigalaxywebapp;User Id=db_aa9e4e_itigalaxywebapp_admin;Password=A123456a"));
+    options.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_aa9e4e_itigalaxywebapp1;User Id=db_aa9e4e_itigalaxywebapp1_admin;Password=A123456a"));
 
 
 builder.Services.AddAuthentication(options =>
