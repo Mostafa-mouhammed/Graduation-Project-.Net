@@ -14,6 +14,7 @@ public class EAVRepository : GenericRepository<EAVProducts>, IEAVRepository
     {
         return await _context.Set<EAVProducts>()
             .Where(eav => eav.variantGroupId == groupId)
+            .Where(eav => eav.product.isDeleted == false)
             .Include(eav => eav.value)
             .ThenInclude(eav => eav.attribute)
             .ToListAsync();

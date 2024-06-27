@@ -47,6 +47,15 @@ public class CategoryRepository:GenericRepository<Category>, ICategoryRepository
 
             return await query.ToListAsync();
     }
+    public async Task<IEnumerable<Category>?> getCateoriesForAdmin()
+    {
+        IQueryable<Category> query = _context
+           .Set<Category>()
+           .AsNoTracking()
+           .AsQueryable();
+
+        return await query.ToListAsync();
+    }
 
     public void retriveDeletedCategory(int id)
     {

@@ -13,6 +13,7 @@ public record ProductOneDTO(
     double rate,
     int quantity,
     double Price,
+    bool isDeleted,
     ProductType productType,
     int? variantGroupId,
     BrandReadDTO brand,

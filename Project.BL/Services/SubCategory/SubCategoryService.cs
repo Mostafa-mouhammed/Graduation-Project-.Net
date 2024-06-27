@@ -141,8 +141,8 @@ public class SubCategoryService : ISubCategoryService
 
         subCategory.Name = update.Name;
         subCategory.Description = update.Description;
-        //subCategory.categoryId = update.categoryId;
-        //subCategory.image = await _mapper.image.ConvertImage(update.image);
+        subCategory.categoryId = update.categoryId;
+        subCategory.image = update.image;
 
         await _unit.SaveChanges();
         return new StatuscodeDTO(Statuscode.NoContent);

@@ -91,13 +91,13 @@ public class ProductMapper : IProductMapper
             model.rate,
             model.Quantity,
             model.Price,
+            model.isDeleted,
             model.productType,
             model.variantGroupId,
             brandDTO,
             categoryDTO,
             productImagesDTO,
             versions
-            
             );
     }
 
