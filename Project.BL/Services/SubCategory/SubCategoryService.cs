@@ -43,7 +43,7 @@ public class SubCategoryService : ISubCategoryService
         if (product == null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is no product with this id");
 
-        SubCategoryImages existImage = await _unit.subCategoryImages.getSubCategoryImage(insert.subCategoryId,insert.productId);
+        SubCategoryImages existImage = await _unit.subCategoryImages.getSubCategoryImage(insert.subCategoryId, insert.productId);
         if (existImage != null)
             return new StatuscodeDTO(Statuscode.NotFound, "There is already image with this product id and sub category id");
 
@@ -71,7 +71,7 @@ public class SubCategoryService : ISubCategoryService
     {
         IEnumerable<SubCategory> subCategoriesModels = await _unit.subCategory.GetAll();
         IEnumerable<SubCategoryAdminReadDTO> subCategoriesRead = _mapper.subCategory.modelToAdminReadList(subCategoriesModels);
-        return new StatuscodeDTO(Statuscode.Ok,null, subCategoriesRead);
+        return new StatuscodeDTO(Statuscode.Ok, null, subCategoriesRead);
     }
 
     public async Task<StatuscodeDTO> getByCategory(int Id)
@@ -83,17 +83,17 @@ public class SubCategoryService : ISubCategoryService
         IEnumerable<SubCategory> subCategories = await _unit.subCategory.getSubcategoriesbyCategory(Id);
         IEnumerable<SubCategoryReadDTO> subCategoriesDTO = _mapper.subCategory.modelToReadList(subCategories);
 
-        return new StatuscodeDTO(Statuscode.Ok, null,subCategoriesDTO);
+        return new StatuscodeDTO(Statuscode.Ok, null, subCategoriesDTO);
     }
 
     public async Task<StatuscodeDTO> getOne(int Id)
     {
         SubCategory subCategory = await _unit.subCategory.getOneSubCategory(Id);
-        if(subCategory == null)
-            return new StatuscodeDTO(Statuscode.NotFound,"There is no sub category with this id");
+        if (subCategory == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "There is no sub category with this id");
 
-        IEnumerable<SubCategoryImageReadDTO> images = _mapper.subCategoryImage.modelToReadList(subCategory.subCategoryImages); 
-        SubCategoryDetailsDTO subCategoryDetials=  _mapper.subCategory.modelToDetails(subCategory, images);
+        IEnumerable<SubCategoryImageReadDTO> images = _mapper.subCategoryImage.modelToReadList(subCategory.subCategoryImages);
+        SubCategoryDetailsDTO subCategoryDetials = _mapper.subCategory.modelToDetails(subCategory, images);
         return new StatuscodeDTO(Statuscode.Ok, null, subCategoryDetials);
     }
 
@@ -102,7 +102,7 @@ public class SubCategoryService : ISubCategoryService
         IEnumerable<SubCategory> subCategories = await _unit.subCategory.getSubcategorywithProductsByCategory(Id);
         IEnumerable<SubCategoryWithProductDTO> subcategoireswithproducts = _mapper.subCategory.modelToWithProductsList(subCategories);
 
-        return new StatuscodeDTO(Statuscode.Ok,null, subcategoireswithproducts);
+        return new StatuscodeDTO(Statuscode.Ok, null, subcategoireswithproducts);
     }
 
     public async Task<StatuscodeDTO> Retrieve(int Id)
@@ -133,7 +133,7 @@ public class SubCategoryService : ISubCategoryService
         return new StatuscodeDTO(Statuscode.NoContent);
     }
 
-    public async Task<StatuscodeDTO> update(int Id,SubCategoryUpdateDTO update)
+    public async Task<StatuscodeDTO> update(int Id, SubCategoryUpdateDTO update)
     {
         SubCategory subCategory = await _unit.subCategory.Getone(Id);
         if (subCategory == null)
@@ -141,8 +141,8 @@ public class SubCategoryService : ISubCategoryService
 
         subCategory.Name = update.Name;
         subCategory.Description = update.Description;
-        subCategory.categoryId = update.categoryId;
-        subCategory.image = await _mapper.image.ConvertImage(update.image);
+        //subCategory.categoryId = update.categoryId;
+        //subCategory.image = await _mapper.image.ConvertImage(update.image);
 
         await _unit.SaveChanges();
         return new StatuscodeDTO(Statuscode.NoContent);
