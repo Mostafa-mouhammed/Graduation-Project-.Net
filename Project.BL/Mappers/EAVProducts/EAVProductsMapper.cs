@@ -29,19 +29,6 @@ public class EAVProductsMapper : IEAVProductsMapper
     }
 
 
-    //public IEnumerable<AttributeWithValuesReadDTO> EavOneProductList(IEnumerable<EAVProducts> modelList)
-    //{
-    //    IEnumerable<Attributes> attributeIds = modelList
-    //        .DistinctBy(m => m.value.attributeId)
-    //        .Select(m => m.value.attribute);
-
-    //    return attributeIds
-    //        .Select(a =>EAVOneProduct(a, modelList
-    //        .Where(m => m.value.attributeId == a.Id)
-    //        .Select(m => m.value)));
-
-    //}
-
     private AttributeWithValuesReadDTO EAVOneProduct(int productId,IEnumerable<Attributes> attribute, IEnumerable<Values> value)
     {
        IEnumerable<AttributesReadDTO> attributeDTO = attribute.Select(a => new AttributesReadDTO(a.Id, a.Name));
