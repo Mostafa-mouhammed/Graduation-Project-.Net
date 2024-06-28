@@ -66,11 +66,16 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
         return await query.ToListAsync();
     }
 
-    public async Task<int> GetTotalPagesbyOrders(string userId)
+    public async Task<int> GetTotalPagesbyOrders(string userId, string sort)
     {
         return await _context.Set<Order>()
             .Where(o => o.UserId == userId)
-            .Where(o => o.status != OrderStatus.PendingPayment)
+            .Where(o =>
+             sort.Equals("cancelled") ? o.status.Equals(OrderStatus.Cancelled)
+            : sort.Equals("pending") ? o.status.Equals(OrderStatus.Pending)
+            : sort.Equals("delivered") ? o.status.Equals(OrderStatus.Delivered)
+            : !o.status.Equals(OrderStatus.PendingPayment)
+            )
             .CountAsync();
     }
 

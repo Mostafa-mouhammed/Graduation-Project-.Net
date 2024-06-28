@@ -17,7 +17,6 @@ public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         IQueryable<Product> query = _context
             .Set<Product>()
-            .AsNoTracking()
             .Where(p => orderItems.Select(o => o.ProductId)
             .Contains(p.Id))
             .AsQueryable();

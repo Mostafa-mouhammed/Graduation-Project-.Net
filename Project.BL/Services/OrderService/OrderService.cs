@@ -110,8 +110,6 @@ public class OrderService : IOrderService
 
         /* decrease the product stock quantity by the taken quantity of the order items */
         await adjustStockQtyAfterPayment(newOrder.Items);
-        await _unitRepository.SaveChanges();
-
 
         /* Check the products in all carts that match those in the order,
         If the quantity exceeds the stock limit, reduce it to match the stock limit */
@@ -132,7 +130,7 @@ public class OrderService : IOrderService
             return new StatuscodeDTO(Statuscode.NotFound, "Invalid Token");
 
         IEnumerable<Order> ordersModel = await _unitRepository.order.getOrdersHistory(existedUser.Id, page, sort);
-        int orderCount = await _unitRepository.order.GetTotalPagesbyOrders(existedUser.Id);
+        int orderCount = await _unitRepository.order.GetTotalPagesbyOrders(existedUser.Id, sort);
         int totalPages = getTotalPages(orderCount, 5);
         OrderPaginationRead orderPagination = _mapper.order.listModelToPagingation(ordersModel, totalPages);
 
@@ -192,6 +190,7 @@ public class OrderService : IOrderService
             OrderItem orderitem = orderItems.FirstOrDefault(oi => oi.ProductId == product.Id);
             product.Quantity -= orderitem.ItemQuantity;
         }
+       await _unitRepository.SaveChanges();
     }
     public async Task adjustCartItemsQuantityAfterPayment(IEnumerable<OrderItem> orderItems)
     {
