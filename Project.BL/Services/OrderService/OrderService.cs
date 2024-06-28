@@ -233,4 +233,15 @@ public class OrderService : IOrderService
     {
         return (int)Math.Ceiling(((double)count / limit));
     }
+
+    public async Task<StatuscodeDTO> GetDeliveredOrdersCount(ClaimsPrincipal user)
+    {
+        /* check if the user is exist and check the token */
+        User? existedUser = await _unitRepository.user.GetUserAsync(user);
+        if (existedUser == null)
+            return new StatuscodeDTO(Statuscode.NotFound, "Invalid Token");
+
+        int count = await _unitRepository.order.GetDeliveredOrdersCount(existedUser.Id);
+        return new StatuscodeDTO(Statuscode.Ok,null, count);
+    }
 }

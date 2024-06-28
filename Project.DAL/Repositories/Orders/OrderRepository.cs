@@ -25,6 +25,18 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
         throw new NotImplementedException();
     }
 
+    public async Task<int> GetDeliveredOrdersCount(string userId)
+    {
+        IQueryable<int> query = _context
+            .Set<Order>()
+            .Where(o => o.UserId == userId)
+            .Where(o => o.status.Equals(OrderStatus.Delivered))
+            .Select(o => o.Id)
+            .AsQueryable();
+
+        return await query.CountAsync();
+    }
+
     public async Task<Order?> GetOrder(int orderId)
     {
         return await _context.order

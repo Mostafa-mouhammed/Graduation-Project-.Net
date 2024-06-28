@@ -30,6 +30,15 @@ public class OrderController : ControllerBase
     }
 
     [Authorize]
+    [Route("GetDeliveredCount")]
+    [HttpGet]
+    public async Task<IActionResult> GetDeliveredCount()
+    {
+        StatuscodeDTO result = await _unit.order.GetDeliveredOrdersCount(User);
+        return StatusCode((int)result.Statuscode, result.data ?? result.message);
+    }
+
+    [Authorize]
     [Route("CancelOrder")]
     [HttpDelete]
     public async Task<IActionResult> CancelOrder(int orderId)

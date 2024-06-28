@@ -10,8 +10,8 @@ public interface IOrderService
     Task<StatuscodeDTO> placeOrder(ClaimsPrincipal user,string address);
     Task<StatuscodeDTO> cancelOrder(ClaimsPrincipal user, int orderId);
     Task<IEnumerable<OrderReadDTO>> GetAllOrders();
-
     Task<StatuscodeDTO> UpdateOrderStatus(int orderId, OrderStatus newStatus);
     Task<StatuscodeDTO> succsessPayment(string userId,int orderId);
     Task<StatuscodeDTO> falidPayment(string userId, int orderId);
+    Task<StatuscodeDTO> GetDeliveredOrdersCount(ClaimsPrincipal user);
 }

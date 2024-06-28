@@ -10,5 +10,6 @@ public interface IOrderRepository:IGenericRepository<Order>
     Task<Order?> GetOrder(int orderId);
     void CreateOrder();
     Task<Order?> CheckOrder(string userId,int orderId);
+    Task<int> GetDeliveredOrdersCount(string userId);
 
 }

@@ -36,7 +36,7 @@ public class OrderItemRepository:GenericRepository<OrderItem>, IOrderItemReposit
         IQueryable<int> query = _context
             .Set<OrderItem>()
             .Where(o => o.ProductId == productId)
-            //.Where(o => o.order.status == OrderStatus.Deliverd)
+            .Where(o => o.order.status == OrderStatus.Delivered)
             .Include(o => o.order)
             .Where(o => o.order.UserId == userId)
             .Select(o => o.ProductId)
